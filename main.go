@@ -27,7 +27,7 @@ func main() {
 	flag.BoolVar(&debugMode, "debug", false, "set to true to run the provider with support for debuggers like delve")
 	flag.Parse()
 
-	opts := &plugin.ServeOpts{ProviderFunc: provider.New(version)}
+	opts := &plugin.ServeOpts{ProviderFunc: provider.New()}
 
 	if debugMode {
 		// TODO: update this string with the full name of your provider as used in your configs

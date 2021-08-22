@@ -6,20 +6,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// Provider -
-func Provider() *schema.Provider {
-	return &schema.Provider{
-		Schema: map[string]*schema.Schema{
-			"token": &schema.Schema{
-				Type:      schema.TypeString,
-				Required:  true,
-				Sensitive: true,
+func New() func() *schema.Provider {
+	return func() *schema.Provider {
+		provider := &schema.Provider{
+			Schema: map[string]*schema.Schema{
+				"token": &schema.Schema{
+					Type:      schema.TypeString,
+					Required:  true,
+					Sensitive: true,
+				},
 			},
-		},
-		ResourcesMap:   map[string]*schema.Resource{},
-		DataSourcesMap: map[string]*schema.Resource{},
+			ResourcesMap:   map[string]*schema.Resource{},
+			DataSourcesMap: map[string]*schema.Resource{},
 
-		ConfigureContextFunc: providerConfigure,
+			ConfigureContextFunc: providerConfigure,
+		}
+		return provider
 	}
 }
 
