@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/theostanton/terraform-provider-notion/internal/provider/datas/user"
+	"github.com/theostanton/terraform-provider-notion/internal/provider/resources/database"
 )
 
 func New() func() *schema.Provider {
@@ -16,8 +18,12 @@ func New() func() *schema.Provider {
 					Sensitive: true,
 				},
 			},
-			ResourcesMap:   map[string]*schema.Resource{},
-			DataSourcesMap: map[string]*schema.Resource{},
+			ResourcesMap: map[string]*schema.Resource{
+				"notion_database": database.Resource(),
+			},
+			DataSourcesMap: map[string]*schema.Resource{
+				"notion_user": user.Data(),
+			},
 
 			ConfigureContextFunc: providerConfigure,
 		}
