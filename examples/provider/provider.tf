@@ -1,3 +1,3 @@
-provider "scaffolding" {
-  # example configuration here
+provider "notion" {
+  api_token = "secret_123"
 }
