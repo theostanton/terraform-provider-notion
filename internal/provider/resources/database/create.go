@@ -29,10 +29,10 @@ func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 		})
 	}
 
-	titleColumnTitle, ok := data.GetOk("title_column_title")
+	titleColumnTitle := data.Get("title_column_title").(string)
 	if ok {
 		database.Properties = map[string]model.DatabaseProperty{
-			titleColumnTitle.(string): model.NewTitleDatabaseProperty(nil),
+			titleColumnTitle: model.NewTitleDatabaseProperty(titleColumnTitle),
 		}
 	} else {
 		abort = true

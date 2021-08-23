@@ -5,11 +5,6 @@ import (
 )
 
 var resourceSchema = map[string]*schema.Schema{
-	"last_updated": &schema.Schema{
-		Type:     schema.TypeString,
-		Optional: true,
-		Computed: true,
-	},
 	"title": &schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
