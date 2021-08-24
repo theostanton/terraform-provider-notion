@@ -20,7 +20,8 @@ jobs:
       - uses: paulhatch/semantic-version@v4.0.2
         id: semver
         with:
-          format: "v${major}.${minor}.${patch}"
+          format: "${major}.${minor}.${patch}"
+          tag_prefix: "v"
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
