@@ -13,10 +13,11 @@ jobs:
     steps:
       - name: Unshallow
         run: git fetch --prune --unshallow
-          - name: Set up Go
-            uses: actions/setup-go@v2
-            with:
-              go-version: 1.17
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
 
       - name: Import GPG key
         id: import_gpg
@@ -29,7 +30,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --rm-dist
+          args: release --rm-dist --id darwin_amd64
         env:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
