@@ -5,25 +5,25 @@ import (
 	"github.com/theostanton/terraform-provider-notion/internal/model"
 )
 
-func RichTextResource() *schema.Resource {
+func BasicResource(propertyType string) *schema.Resource {
 
 	_schema := map[string]*schema.Schema{
 		"database": {
 			Type:        schema.TypeString,
 			Required:    true,
 			Description: "ID of database this property belongs to",
-				},
+		},
 		"name": {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Default:     "Name",
 			Description: "title of this property",
-				},
+		},
 	}
 
 	createOrUpdate := createOrUpdate(func(data *schema.ResourceData) model.DatabaseProperty {
 		name := data.Get("name").(string)
-		return model.NewRichTextDatabaseProperty(&name)
+		return model.NewBasicDatabaseProperty(&name, propertyType)
 	})
 
 	return &schema.Resource{

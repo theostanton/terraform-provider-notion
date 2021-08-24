@@ -44,8 +44,6 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 	}
 
 	switch *property.Type {
-	case "rich_text":
-		return
 	case "select":
 		if property.Select == nil {
 			diags = append(diags, diag.Diagnostic{
@@ -116,6 +114,17 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 			})
 			return
 		}
+	case "rich_text":
+	case "date":
+	case "people":
+	case "file":
+	case "checkbox":
+	case "url":
+	case "email":
+	case "created_time":
+	case "created_by":
+	case "last_edited_time":
+	case "last_edited_by":
 	default:
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,
