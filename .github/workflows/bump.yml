@@ -1,0 +1,27 @@
+name: "Pre release"
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+
+  pre-release:
+    name: "Pre Release"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: paulhatch/semantic-version@v4.0.2
+        id: semver
+        with:
+          tag_prefix: "v"
+          # A string to determine the format of the version output
+          format: "${major}.${minor}.${patch}-prerelease${increment}"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: ${{ steps.semver.outputs.version }}
+          prerelease: true
+          title: ${{ steps.semver.outputs.version }}

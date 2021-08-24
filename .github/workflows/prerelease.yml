@@ -2,8 +2,8 @@ name: "Pre release"
 
 on:
   push:
-    branches:
-      - "main"
+    tags:
+      - 'v*'
 
 jobs:
 
@@ -22,6 +22,10 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: "Generate docs"
+        run: |
+          go generate
+
       - name: Import GPG key
         id: import_gpg
         uses: hashicorp/ghaction-import-gpg@v2.1.0
@@ -29,7 +33,7 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
 
-      - name: Run GoReleaser
+      - name: "Build"
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
@@ -37,13 +41,3 @@ jobs:
         env:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Development Build"
-          files: |
-            LICENSE.txt
-            *.jar
