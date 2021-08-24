@@ -1,15 +1,11 @@
-name: Tests
+name: "Build, Test + Release"
 on:
-  pull_request:
-    paths-ignore:
-      - 'README.md'
   push:
-    paths-ignore:
-      - 'README.md'
+
 jobs:
-  # ensure the code builds...
+
   build:
-    name: Build
+    name: "Build"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -32,7 +28,7 @@ jobs:
           go build -v .
 
   test:
-    name: Matrix Test
+    name: "Test"
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -43,7 +39,6 @@ jobs:
           - '1.0.5'
           - '0.15.5'
     steps:
-
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
@@ -65,3 +60,29 @@ jobs:
 
         run: |
           go test -v -cover ./internal/provider/
+
+  release:
+    name: "Release"
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: "Bump"
+        uses: paulhatch/semantic-version@v4.0.2
+        id: semver
+        with:
+          format: "v${major}.${minor}.${patch}"
+          tag_prefix: "v"
+
+      - name: "Release"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: ${{ steps.semver.outputs.version }}
+          prerelease: true
+          title: ${{ steps.semver.outputs.version }}
