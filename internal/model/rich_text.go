@@ -4,8 +4,15 @@ type RichText struct {
 	Type        string       `json:"type"`
 	Text        Text         `json:"text"`
 	Annotations *Annotations `json:"annotations,omitempty"`
-	PlainText   string       `json:"plain_text,omitempty"`
+	PlainText   *string      `json:"plain_text,omitempty"`
 	Href        interface{}  `json:"href,omitempty"`
+}
+
+func (richText *RichText) Get() string {
+	if richText.PlainText != nil {
+		return *richText.PlainText
+	}
+	return richText.Text.Content
 }
 
 type Text struct {

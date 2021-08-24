@@ -5,15 +5,15 @@ import (
 )
 
 var resourceSchema = map[string]*schema.Schema{
-	"title": &schema.Schema{
+	"title": {
 		Type:     schema.TypeString,
 		Required: true,
 	},
-	"parent": &schema.Schema{
+	"parent": {
 		Type:     schema.TypeString,
 		Required: true,
 	},
-	"title_column_title": &schema.Schema{
+	"title_column_title": {
 		Type:     schema.TypeString,
 		Required: true,
 	},

@@ -8,11 +8,6 @@ import (
 	"net/http"
 )
 
-type GetDatabaseResponse struct {
-	Results []model.Database `json:"results"`
-	HasMore bool             `json:"has_more"`
-}
-
 func (client *Client) GetDatabase(ctx context.Context, databaseId string) (database model.Database, err error) {
 	path := fmt.Sprintf("databases/%s", databaseId)
 	req, err := client.generateGet(ctx, path)
@@ -31,14 +26,14 @@ func (client *Client) GetDatabase(ctx context.Context, databaseId string) (datab
 		return model.Database{}, fmt.Errorf("failed to find database: %w", parseErrorResponse(res))
 	}
 
-	var response *GetDatabaseResponse
+	var response *model.Database
 
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return model.Database{}, fmt.Errorf("failed to parse HTTP response: %w", err)
 	}
 
-	return response.Results[0], nil
+	return *response, nil
 }
 
 type QueryDatabaseResponse struct {

@@ -8,17 +8,17 @@ import (
 )
 
 var dataSchema = map[string]*schema.Schema{
-	"email": &schema.Schema{
+	"email": {
 		Type:     schema.TypeString,
 		Required: true,
 	},
-	"name": &schema.Schema{
+	"name": {
 		Type:     schema.TypeString,
-		Optional: true,
+		Computed: true,
 	},
-	"user_id": &schema.Schema{
+	"user_id": {
 		Type:     schema.TypeString,
-		Optional: true,
+		Computed: true,
 	},
 }
 

@@ -1,4 +1,4 @@
-package database
+package user
 
 import (
 	"context"
@@ -6,6 +6,29 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/theostanton/terraform-provider-notion/internal/api"
 )
+
+var dataSchema = map[string]*schema.Schema{
+	"database": {
+		Type:     schema.TypeString,
+		Required: true,
+	},
+	"title": {
+		Type:     schema.TypeString,
+		Computed: true,
+	},
+	"title_column_title": {
+		Type:     schema.TypeString,
+		Computed: true,
+	},
+}
+
+func Data() *schema.Resource {
+
+	return &schema.Resource{
+		ReadContext: read,
+		Schema:      dataSchema,
+	}
+}
 
 func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags diag.Diagnostics) {
 	client := m.(*api.Client)

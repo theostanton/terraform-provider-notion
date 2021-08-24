@@ -28,6 +28,9 @@ data "notion_user" "example" {
 ### Optional
 
 - **id** (String) The ID of this resource.
+
+### Read-Only
+
 - **name** (String)
 - **user_id** (String)
 

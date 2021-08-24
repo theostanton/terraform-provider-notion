@@ -5,16 +5,16 @@ import (
 )
 
 var dataSchema = map[string]*schema.Schema{
-	"database": &schema.Schema{
+	"database": {
 		Type:     schema.TypeString,
 		Required: true,
 	},
-	"entries": &schema.Schema{
+	"entries": {
 		Type: schema.TypeList,
 		Elem: &schema.Schema{
 			Type: schema.TypeMap,
 		},
-		Optional: true,
+		Computed: true,
 	},
 }
 

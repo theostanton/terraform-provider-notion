@@ -68,6 +68,8 @@ type SelectOption struct {
 }
 
 type DatabaseProperty struct {
+	ID       *string                     `json:"id,omitempty"`
+	Type     *string                     `json:"type,omitempty"`
 	Name     *string                     `json:"name,omitempty"`
 	Title    *struct{}                   `json:"title,omitempty"`
 	RichText *struct{}                   `json:"rich_text,omitempty"`

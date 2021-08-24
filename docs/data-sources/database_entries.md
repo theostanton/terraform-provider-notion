@@ -37,7 +37,10 @@ output "entries" {
 
 ### Optional
 
-- **entries** (List of Map of String)
 - **id** (String) The ID of this resource.
+
+### Read-Only
+
+- **entries** (List of Map of String)
 
 

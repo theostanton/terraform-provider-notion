@@ -7,4 +7,5 @@ develop:
 	go build -o terraform-provider-notion
 	mv terraform-provider-notion ~/.terraform.d/plugins/theostanton/providers/notion/0.0.1/darwin_amd64
 	cd usage && terraform init
-	cd usage && terraform apply
+	cd usage && TF_LOG=INFO terraform apply
+	#cd usage && terraform apply

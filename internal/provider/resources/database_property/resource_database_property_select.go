@@ -60,7 +60,7 @@ func SelectResource() *schema.Resource {
 		}
 		rawSelectOptions := data.Get("options").(map[string]interface{})
 		if rawSelectOptions != nil {
-			options := make([]model.SelectOption, len(rawSelectOptions))
+			var options []model.SelectOption
 			for optionName, rawSelectOption := range rawSelectOptions {
 				options = append(options, model.SelectOption{
 					Name:  optionName,
