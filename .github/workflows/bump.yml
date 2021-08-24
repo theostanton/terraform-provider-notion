@@ -1,4 +1,4 @@
-name: "Pre release"
+name: "Bump version"
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
         with:
           tag_prefix: "v"
           # A string to determine the format of the version output
-          format: "${major}.${minor}.${patch}-prerelease${increment}"
+          format: "${major}.${minor}.${patch}"
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
