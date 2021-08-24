@@ -1,0 +1,44 @@
+---
+name: "pre-release"
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  pre-release:
+    name: "Pre Release"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+          - name: Set up Go
+            uses: actions/setup-go@v2
+            with:
+              go-version: 1.14
+          - name: Import GPG key
+            id: import_gpg
+            uses: hashicorp/ghaction-import-gpg@v2.1.0
+            env:
+              GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+              PASSPHRASE: ${{ secrets.PASSPHRASE }}
+          - name: Run GoReleaser
+            uses: goreleaser/goreleaser-action@v2.7.0
+            with:
+              version: latest
+              args: release --rm-dist
+            env:
+              GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            LICENSE.txt
+            *.jar
