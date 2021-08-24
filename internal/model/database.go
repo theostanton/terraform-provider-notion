@@ -47,6 +47,15 @@ func NewSelectDatabaseProperty(name *string, options *[]SelectOption) DatabasePr
 	}
 }
 
+func NewMultiDatabaseProperty(name *string, options *[]SelectOption) DatabaseProperty {
+	return DatabaseProperty{
+		Name: name,
+		MultiSelect: &MultiSelectDatabasePropertyInfo{
+			Options: options,
+		},
+	}
+}
+
 func NewTitleDatabaseProperty(name string) DatabaseProperty {
 	return DatabaseProperty{
 		Name:  &name,
@@ -62,19 +71,24 @@ type SelectDatabasePropertyInfo struct {
 	Options *[]SelectOption `json:"options,omitempty"`
 }
 
+type MultiSelectDatabasePropertyInfo struct {
+	Options *[]SelectOption `json:"options,omitempty"`
+}
+
 type SelectOption struct {
 	Name  string `json:"name"`
 	Color string `json:"color"`
 }
 
 type DatabaseProperty struct {
-	ID       *string                     `json:"id,omitempty"`
-	Type     *string                     `json:"type,omitempty"`
-	Name     *string                     `json:"name,omitempty"`
-	Title    *struct{}                   `json:"title,omitempty"`
-	RichText *struct{}                   `json:"rich_text,omitempty"`
-	Number   *NumberDatabasePropertyInfo `json:"number,omitempty"`
-	Select   *SelectDatabasePropertyInfo `json:"select,omitempty"`
+	ID          *string                          `json:"id,omitempty"`
+	Type        *string                          `json:"type,omitempty"`
+	Name        *string                          `json:"name,omitempty"`
+	Title       *struct{}                        `json:"title,omitempty"`
+	RichText    *struct{}                        `json:"rich_text,omitempty"`
+	Number      *NumberDatabasePropertyInfo      `json:"number,omitempty"`
+	Select      *SelectDatabasePropertyInfo      `json:"select,omitempty"`
+	MultiSelect *MultiSelectDatabasePropertyInfo `json:"multi_select,omitempty"`
 }
 
 type DatabasePropertyValue struct {

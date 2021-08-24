@@ -71,6 +71,31 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 		}
 
 		return
+	case "multi_select":
+		if property.MultiSelect == nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldnt find multi_select property option",
+				Detail:   fmt.Sprintf("Couldnt find multi_select info on property for name=%s in Get Database response", name),
+			})
+			return
+		}
+		options := map[string]string{}
+		for _, option := range *property.Select.Options {
+			options[option.Name] = option.Color
+		}
+		err = data.Set("options", options)
+
+		if err != nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldnt set options value",
+				Detail:   err.Error(),
+			})
+			return
+		}
+
+		return
 	case "number":
 		if property.Number == nil {
 			diags = append(diags, diag.Diagnostic{
