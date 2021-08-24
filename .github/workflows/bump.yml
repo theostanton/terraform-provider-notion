@@ -15,9 +15,7 @@ jobs:
       - uses: paulhatch/semantic-version@v4.0.2
         id: semver
         with:
-          tag_prefix: "v"
-          # A string to determine the format of the version output
-          format: "${major}.${minor}.${patch}"
+          format: "v${major}.${minor}.${patch}"
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
