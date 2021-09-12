@@ -63,8 +63,8 @@ jobs:
         run: |
           go test -v -cover ./internal/provider/
 
-  release:
-    name: "Release"
+  tag:
+    name: "Tag"
     needs: test
     runs-on: ubuntu-latest
 
@@ -80,3 +80,7 @@ jobs:
         with:
           format: "v${major}.${minor}.${patch}"
           tag_prefix: "v"
+
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.semver.outputs.version }}
