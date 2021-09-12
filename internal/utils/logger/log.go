@@ -7,7 +7,7 @@ import (
 )
 
 func execute(level string, message string) {
-	log.Println(fmt.Sprintf("[%s] %s", level, message))
+	log.Print(fmt.Sprintf("\n[%s] %s", level, message))
 }
 
 func Error(format string, args ...interface{}) {

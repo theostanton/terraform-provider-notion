@@ -28,6 +28,22 @@ resource "notion_database_property_relation" "to_some_other" {
   database_id = notion_database.some_other_database.id
 }
 
+
+resource "notion_database_property_number" "count" {
+  database = notion_database.some_other_database.id
+  name = "Count"
+}
+
+resource "notion_database_property_rollup" "to_some_other" {
+  database = notion_database.some_database.id
+  name = "Rollup of some other"
+  relation_property = notion_database_property_relation.to_some_other.name
+  rollup_property = notion_database_property_number.count.name
+  function = "count"
+  depends_on = [
+    notion_database_property_number.count]
+}
+
 /*
 resource "notion_database_property_select" "severity" {
   count = 0

@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/theostanton/terraform-provider-notion/internal/api"
 	"github.com/theostanton/terraform-provider-notion/internal/model"
+	"strings"
 )
 
 func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -61,19 +62,34 @@ func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 		return diags
 	}
 
-	databaseId, err := client.CreateDatabase(ctx, database)
+	databaseId := ""
+	attemptsLeft := 3
+	for databaseId == "" {
+		_databaseId, err := client.CreateDatabase(ctx, database)
 
-	if err != nil {
-		diags = append(diags, diag.Diagnostic{
-			Severity: diag.Error,
-			Summary:  "Create Database API call failed",
-			Detail:   err.Error(),
-		})
-		return diags
+		switch {
+		case err == nil:
+			databaseId = _databaseId
+		case strings.Contains(err.Error(), "Conflict occurred while saving.") && attemptsLeft > 0:
+			attemptsLeft = attemptsLeft - 1
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Warning,
+				Summary:  fmt.Sprintf("Conflict error on creating database, retrying %d more times", attemptsLeft),
+				Detail:   err.Error(),
+			})
+		default:
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Create Database API call failed",
+				Detail:   err.Error(),
+			})
+			return diags
+		}
+
 	}
 
 	url := fmt.Sprintf("notion.so/%s", databaseId)
-	err = data.Set("url", url)
+	err := data.Set("url", url)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Warning,

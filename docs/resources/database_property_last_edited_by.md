@@ -18,10 +18,10 @@ description: |-
 ### Required
 
 - **database** (String) ID of database this property belongs to
+- **name** (String) title of this property
 
 ### Optional
 
 - **id** (String) The ID of this resource.
-- **name** (String) title of this property
 
 

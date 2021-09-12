@@ -31,4 +31,9 @@ resource "notion_database" "example" {
 
 - **id** (String) The ID of this resource.
 
+### Read-Only
+
+- **title_column_id** (String)
+- **url** (String)
+
 

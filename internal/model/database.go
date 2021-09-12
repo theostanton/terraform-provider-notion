@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/theostanton/terraform-provider-notion/internal/utils/logger"
 	"time"
 )
@@ -23,6 +24,15 @@ func NewDatabase(title string, parent Parent, properties map[string]DatabaseProp
 		Parent:     &parent,
 		Properties: properties,
 	}
+}
+
+func (database *Database) ExtractColumnTitleId() (string, error) {
+	for key, property := range database.Properties {
+		if *property.Type == "title" {
+			return key, nil
+		}
+	}
+	return "", errors.New("getColumnTitleId - couldn't find title property")
 }
 
 func NewBasicDatabaseProperty(name *string, propertyType string) DatabaseProperty {
@@ -90,6 +100,60 @@ func NewNumberDatabaseProperty(name *string, format *string) DatabaseProperty {
 		},
 	}
 }
+
+type RollupFunction string
+
+const (
+	CountAll          RollupFunction = "count_all"
+	CountValues                      = "count_values"
+	CountUniqueValues                = "count_unique_values"
+	CountEmpty                       = "count_empty"
+	CountNotEmpty                    = "count_not_empty"
+	PercentEmpty                     = "percent_empty"
+	PercentNotEmpty                  = "percent_not_empty"
+	Sum                              = "sum"
+	Average                          = "average"
+	Median                           = "median"
+	Min                              = "min"
+	Max                              = "max"
+	Range                            = "range"
+	ShowOriginal                     = "show_original"
+)
+
+var RollupFunctions = [...]RollupFunction{
+	CountAll,
+	CountValues,
+	CountUniqueValues,
+	CountEmpty,
+	CountNotEmpty,
+	PercentEmpty,
+	PercentNotEmpty,
+	Sum,
+	Average,
+	Median,
+	Min,
+	Max,
+	Range,
+	ShowOriginal,
+}
+
+type RollupDatabasePropertyInfo struct {
+	RelationPropertyName string         `json:"relation_property_name"`
+	RollupPropertyName   string         `json:"rollup_property_name"`
+	Function             RollupFunction `json:"function"`
+}
+
+func NewRollupDatabaseProperty(name *string, rollupPropertyName string, relationPropertyName string, function RollupFunction) DatabaseProperty {
+	return DatabaseProperty{
+		Name: name,
+		Rollup: &RollupDatabasePropertyInfo{
+			RelationPropertyName: relationPropertyName,
+			RollupPropertyName:   rollupPropertyName,
+			Function:             function,
+		},
+	}
+}
+
 func NewRelationDatabaseProperty(name *string, databaseId string) DatabaseProperty {
 	return DatabaseProperty{
 		Name: name,
@@ -163,6 +227,7 @@ type DatabaseProperty struct {
 	LastEditedBy   *struct{}                        `json:"last_edited_by,omitempty"`
 	Number         *NumberDatabasePropertyInfo      `json:"number,omitempty"`
 	Relation       *RelationDatabasePropertyInfo    `json:"relation,omitempty"`
+	Rollup         *RollupDatabasePropertyInfo      `json:"rollup,omitempty"`
 	Select         *SelectDatabasePropertyInfo      `json:"select,omitempty"`
 	MultiSelect    *MultiSelectDatabasePropertyInfo `json:"multi_select,omitempty"`
 }

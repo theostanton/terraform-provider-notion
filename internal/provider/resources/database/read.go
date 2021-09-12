@@ -31,6 +31,23 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 		})
 	}
 
+	titleColumnId,err := database.ExtractColumnTitleId()
+	if err != nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Warning,
+			Summary:  "Failed to find title_column_id value",
+			Detail:   err.Error(),
+		})
+	}
+	err = data.Set("title_column_id",titleColumnId)
+	if err != nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Warning,
+			Summary:  "Failed to set title_column_id from API response",
+			Detail:   err.Error(),
+		})
+	}
+
 	err = data.Set("parent", database.Parent.PageId)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{

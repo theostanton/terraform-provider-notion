@@ -27,17 +27,18 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 
 	var property model.DatabaseProperty
 	foundProperty := false
-	for _, databaseProperty := range database.Properties {
+	for key, databaseProperty := range database.Properties {
 		if *databaseProperty.Name == name {
 			property = databaseProperty
 			foundProperty = true
+			data.SetId(key)
 		}
 	}
 
 	if foundProperty == false {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Warning,
-			Summary:  "Couldnt find property",
+			Summary:  "Couldn't find property",
 			Detail:   fmt.Sprintf("Couldnt find property for name=%s in Get Database response", name),
 		})
 		data.SetId("")
@@ -131,6 +132,45 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 			diags = append(diags, diag.Diagnostic{
 				Severity: diag.Error,
 				Summary:  "Couldn't set database_id value",
+				Detail:   err.Error(),
+			})
+			return
+		}
+	case "rollup":
+		if property.Rollup == nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldn't find rollup property option",
+				Detail:   fmt.Sprintf("Couldnt find rollup info on property for name=%s in Get Database response", name),
+			})
+			return
+		}
+
+		err = data.Set("relation_property", property.Rollup.RelationPropertyName)
+		if err != nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldn't set relation_property value",
+				Detail:   err.Error(),
+			})
+			return
+		}
+
+		err = data.Set("rollup_property", property.Rollup.RollupPropertyName)
+		if err != nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldn't set rollup_property value",
+				Detail:   err.Error(),
+			})
+			return
+		}
+
+		err = data.Set("function", property.Rollup.Function)
+		if err != nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldn't set function value",
 				Detail:   err.Error(),
 			})
 			return

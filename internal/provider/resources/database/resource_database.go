@@ -17,6 +17,10 @@ var resourceSchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
 	},
+	"title_column_id": {
+		Type:     schema.TypeString,
+		Computed: true,
+	},
 	"url": {
 		Type:     schema.TypeString,
 		Computed: true,

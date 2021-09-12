@@ -27,6 +27,7 @@ func New() func() *schema.Provider {
 				"notion_database_property_multi_select":     database_property.MultiSelectResource(),
 				"notion_database_property_number":           database_property.NumberResource(),
 				"notion_database_property_relation":         database_property.RelationResource(),
+				"notion_database_property_rollup":           database_property.RollupResource(),
 				"notion_database_property_rich_text":        database_property.BasicResource("rich_text"),
 				"notion_database_property_date":             database_property.BasicResource("date"),
 				"notion_database_property_people":           database_property.BasicResource("people"),
