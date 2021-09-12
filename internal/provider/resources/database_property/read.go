@@ -36,10 +36,11 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 
 	if foundProperty == false {
 		diags = append(diags, diag.Diagnostic{
-			Severity: diag.Error,
+			Severity: diag.Warning,
 			Summary:  "Couldnt find property",
 			Detail:   fmt.Sprintf("Couldnt find property for name=%s in Get Database response", name),
 		})
+		data.SetId("")
 		return diags
 	}
 

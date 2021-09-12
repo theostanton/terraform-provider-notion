@@ -29,7 +29,6 @@ func New() func() *schema.Provider {
 				"notion_database_property_rich_text":        database_property.BasicResource("rich_text"),
 				"notion_database_property_date":             database_property.BasicResource("date"),
 				"notion_database_property_people":           database_property.BasicResource("people"),
-				"notion_database_property_file":             database_property.BasicResource("file"),
 				"notion_database_property_checkbox":         database_property.BasicResource("checkbox"),
 				"notion_database_property_url":              database_property.BasicResource("url"),
 				"notion_database_property_email":            database_property.BasicResource("email"),

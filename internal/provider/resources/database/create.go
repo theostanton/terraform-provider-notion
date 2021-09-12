@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/theostanton/terraform-provider-notion/internal/api"
@@ -69,6 +70,16 @@ func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 			Detail:   err.Error(),
 		})
 		return diags
+	}
+
+	url := fmt.Sprintf("notion.so/%s", databaseId)
+	err = data.Set("url", url)
+	if err != nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Warning,
+			Summary:  "Failed to set url",
+			Detail:   err.Error(),
+		})
 	}
 
 	data.SetId(databaseId)

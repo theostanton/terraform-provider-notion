@@ -18,7 +18,7 @@ func delete(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
-			Severity: diag.Error,
+			Severity: diag.Warning,
 			Summary:  "Couldnt delete page",
 			Detail:   err.Error(),
 		})

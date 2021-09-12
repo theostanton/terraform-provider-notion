@@ -19,7 +19,6 @@ func SelectResource() *schema.Resource {
 		"name": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Default:     "Name",
 			Description: "title of this property",
 		},
 		"options": {

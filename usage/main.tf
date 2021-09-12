@@ -2,7 +2,6 @@ terraform {
   required_providers {
     notion = {
       source = "theostanton/providers/notion"
-      version = "0.0.1"
     }
   }
 }
@@ -26,31 +25,27 @@ resource "notion_database_property_select" "severity" {
   }
 }
 
-resource "notion_database_property_number" "count" {
-  database = notion_database.some_database.id
-  name = "Count"
-  format = "percent"
-}
-
-resource "notion_database_property_rich_text" "summary" {
-  database = notion_database.some_database.id
-  name = "Summary"
-}
-
-resource "notion_database_property_date" "date" {
-  database = notion_database.some_database.id
-  name = "Date"
-}
-
-resource "notion_database_property_people" "people" {
-  database = notion_database.some_database.id
-  name = "People"
-}
-
-resource "notion_database_property_file" "file" {
-  database = notion_database.some_database.id
-  name = "File"
-}
+//resource "notion_database_property_number" "count" {
+//  database = notion_database.some_database.id
+//  name = "Count"
+//  format = "percent"
+//}
+//
+//resource "notion_database_property_rich_text" "summary" {
+//  database = notion_database.some_database.id
+//  name = "Summary"
+//}
+//
+//resource "notion_database_property_date" "date" {
+//  database = notion_database.some_database.id
+//  name = "Date"
+//}
+//
+//resource "notion_database_property_people" "people" {
+//  database = notion_database.some_database.id
+//  name = "People"
+//}
+//
 
 resource "notion_database_property_checkbox" "checkbox" {
   database = notion_database.some_database.id
@@ -86,11 +81,11 @@ resource "notion_database_property_last_edited_by" "last_edited_by" {
   database = notion_database.some_database.id
   name = "Last edited by"
 }
+//
+//data "notion_database_entries" "some_database_entries" {
+//  database = notion_database.some_database.id
+//}
 
-data "notion_database_entries" "some_database_entries" {
-  database = notion_database.some_database.id
-}
-
-output "entries" {
-  value = data.notion_database_entries.some_database_entries.entries
-}
+//output "entries" {
+//  value = data.notion_database_entries.some_database_entries.entries
+//}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/theostanton/terraform-provider-notion/internal/model"
+	"github.com/theostanton/terraform-provider-notion/internal/utils"
 	"net/http"
 )
 
@@ -32,6 +33,9 @@ func (client *Client) GetDatabase(ctx context.Context, databaseId string) (datab
 	if err != nil {
 		return model.Database{}, fmt.Errorf("failed to parse HTTP response: %w", err)
 	}
+
+	normalizedId := utils.NormalizeId(*response.Id)
+	response.Id = &normalizedId
 
 	return *response, nil
 }
@@ -96,7 +100,9 @@ func (client *Client) CreateDatabase(ctx context.Context, database model.Databas
 		return "", fmt.Errorf("failed to parse HTTP response: %w", err)
 	}
 
-	return *response.Id, nil
+	databaseId := utils.NormalizeId(*response.Id)
+
+	return databaseId, nil
 }
 
 func (client *Client) SetDatabaseProperty(ctx context.Context, databaseId string, databasePropertyId string, databaseProperty model.DatabaseProperty) (id string, err error) {

@@ -17,6 +17,10 @@ var resourceSchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
 	},
+	"url": {
+		Type:     schema.TypeString,
+		Computed: true,
+	},
 }
 
 func Resource() *schema.Resource {
