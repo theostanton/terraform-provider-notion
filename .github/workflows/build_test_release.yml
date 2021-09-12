@@ -80,11 +80,3 @@ jobs:
         with:
           format: "v${major}.${minor}.${patch}"
           tag_prefix: "v"
-
-      - name: "Release"
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: ${{ steps.semver.outputs.version }}
-          prerelease: true
-          title: ${{ steps.semver.outputs.version }}

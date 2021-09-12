@@ -35,7 +35,7 @@ resource "notion_database_property_relation" "to_database_two" {
   name     = "Relation to database Two"
 }
 
-resource "notion_database_property_rollup" "to_some_other" {
+resource "notion_database_property_rollup" "sum_of_count" {
   database          = notion_database.one.id
   name              = "Sum of Count"
   relation_property = notion_database_property_relation.to_database_two.name

@@ -25,7 +25,7 @@ resource "notion_database" "two" {
   title_column_title = "Name"
 }
 
-resource "notion_database_property_relation" "example" {
+resource "notion_database_property_relation" "to_database_two" {
   database = notion_database.one.id
   name     = "Relation to database Two"
 }
