@@ -110,7 +110,27 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 		if err != nil {
 			diags = append(diags, diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "Couldnt set format value",
+				Summary:  "Couldn't set format value",
+				Detail:   err.Error(),
+			})
+			return
+		}
+	case "relation":
+		if property.Relation == nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldn't find relation property option",
+				Detail:   fmt.Sprintf("Couldnt find relation info on property for name=%s in Get Database response", name),
+			})
+			return
+		}
+
+		err = data.Set("database_id", property.Relation.DatabaseId)
+
+		if err != nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Couldn't set database_id value",
 				Detail:   err.Error(),
 			})
 			return
@@ -133,7 +153,6 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 			Detail:   fmt.Sprintf("Unknown option type=%s", property.Type),
 		})
 		return
-
 	}
 	return
 }

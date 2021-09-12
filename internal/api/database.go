@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/theostanton/terraform-provider-notion/internal/model"
 	"github.com/theostanton/terraform-provider-notion/internal/utils"
+	"github.com/theostanton/terraform-provider-notion/internal/utils/logger"
 	"net/http"
 )
 
@@ -119,6 +120,7 @@ func (client *Client) SetDatabaseProperty(ctx context.Context, databaseId string
 
 	path := fmt.Sprintf("databases/%s", databaseId)
 	req, err := client.generatePatch(ctx, path, body)
+	logger.InfoObject("SetDatabaseProperty request", body)
 	if err != nil {
 		return
 	}
@@ -137,6 +139,7 @@ func (client *Client) SetDatabaseProperty(ctx context.Context, databaseId string
 	var response *model.Database
 
 	err = json.NewDecoder(res.Body).Decode(&response)
+	logger.InfoObject("SetDatabaseProperty response", response)
 	if err != nil {
 		return "", fmt.Errorf("failed to parse HTTP response: %w", err)
 	}

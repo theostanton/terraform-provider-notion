@@ -90,6 +90,14 @@ func NewNumberDatabaseProperty(name *string, format *string) DatabaseProperty {
 		},
 	}
 }
+func NewRelationDatabaseProperty(name *string, databaseId string) DatabaseProperty {
+	return DatabaseProperty{
+		Name: name,
+		Relation: &RelationDatabasePropertyInfo{
+			DatabaseId: databaseId,
+		},
+	}
+}
 
 func NewSelectDatabaseProperty(name *string, options *[]SelectOption) DatabaseProperty {
 	return DatabaseProperty{
@@ -118,6 +126,10 @@ func NewTitleDatabaseProperty(name string) DatabaseProperty {
 
 type NumberDatabasePropertyInfo struct {
 	Format *string `json:"format,omitempty"`
+}
+
+type RelationDatabasePropertyInfo struct {
+	DatabaseId string `json:"database_id"`
 }
 
 type SelectDatabasePropertyInfo struct {
@@ -150,6 +162,7 @@ type DatabaseProperty struct {
 	LastEditedTime *struct{}                        `json:"last_edited_time,omitempty"`
 	LastEditedBy   *struct{}                        `json:"last_edited_by,omitempty"`
 	Number         *NumberDatabasePropertyInfo      `json:"number,omitempty"`
+	Relation       *RelationDatabasePropertyInfo    `json:"relation,omitempty"`
 	Select         *SelectDatabasePropertyInfo      `json:"select,omitempty"`
 	MultiSelect    *MultiSelectDatabasePropertyInfo `json:"multi_select,omitempty"`
 }
