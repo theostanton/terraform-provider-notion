@@ -1,5 +1,3 @@
-#default: develop
-
 develop:
 	mkdir -p ~/.terraform.d/plugins/theostanton/providers/notion/0.0.1/darwin_amd64
 	rm -rf usage/.terraform
