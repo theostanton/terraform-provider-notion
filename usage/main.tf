@@ -25,7 +25,7 @@ resource "notion_database" "some_other_database" {
 resource "notion_database_property_relation" "to_some_other" {
   database = notion_database.some_database.id
   name = "Relation to some other"
-  database_id = notion_database.some_other_database.id
+  database = notion_database.some_other_database.id
 }
 
 
@@ -39,7 +39,7 @@ resource "notion_database_property_rollup" "to_some_other" {
   name = "Rollup of some other"
   relation_property = notion_database_property_relation.to_some_other.name
   rollup_property = notion_database_property_number.count.name
-  function = "count"
+  function = "sum"
   depends_on = [
     notion_database_property_number.count]
 }

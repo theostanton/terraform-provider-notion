@@ -37,7 +37,6 @@ resource "notion_database_property_relation" "to_database_two" {
 ### Required
 
 - **database** (String) ID of database this property belongs to
-- **database_id** (String) The database this relation refers to. This database must be shared with the integration.
 - **name** (String) title of this property
 
 ### Optional

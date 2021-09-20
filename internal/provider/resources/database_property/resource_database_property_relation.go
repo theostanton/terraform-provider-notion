@@ -18,16 +18,11 @@ func RelationResource() *schema.Resource {
 			Required:    true,
 			Description: "title of this property",
 		},
-		"database_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The database this relation refers to. This database must be shared with the integration.",
-		},
 	}
 
 	createOrUpdate := createOrUpdate(func(data *schema.ResourceData) model.DatabaseProperty {
 		name := data.Get("name").(string)
-		databaseId := data.Get("database_id").(string)
+		databaseId := data.Get("database").(string)
 		return model.NewRelationDatabaseProperty(&name, databaseId)
 	})
 
