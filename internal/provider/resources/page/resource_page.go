@@ -24,7 +24,7 @@ func PageResource() *schema.Resource {
 		CreateContext: create,
 		ReadContext:   read,
 		UpdateContext: update,
-		DeleteContext: deleteResource,
+		DeleteContext: archive,
 		Schema:        pageResourceSchema,
 	}
 }

@@ -20,7 +20,7 @@ func WorkspacePageResource() *schema.Resource {
 		CreateContext: create,
 		ReadContext:   read,
 		UpdateContext: update,
-		DeleteContext: deleteResource,
+		DeleteContext: archive,
 		Schema:        workspacePageResourceSchema,
 	}
 }

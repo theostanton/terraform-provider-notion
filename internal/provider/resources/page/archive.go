@@ -7,7 +7,7 @@ import (
 	"github.com/theostanton/terraform-provider-notion/internal/api"
 )
 
-func deleteResource(ctx context.Context, data *schema.ResourceData, m interface{}) diag.Diagnostics {
+func archive(ctx context.Context, data *schema.ResourceData, m interface{}) diag.Diagnostics {
 	client := m.(*api.Client)
 
 	pageId := data.Id()

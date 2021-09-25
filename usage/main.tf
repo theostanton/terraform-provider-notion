@@ -15,6 +15,14 @@ data "notion_database" "analytics" {
   query = "Analytics"
 }
 
+
+# Sessions
+resource "notion_database" "sessions" {
+  title              = "temporary Sessions"
+  parent             = data.notion_page.tests_page.id
+  title_column_title = "Temporary !"
+}
+
 data "notion_page" "tests_page" {
   query = "Workspace Tests Page"
 }

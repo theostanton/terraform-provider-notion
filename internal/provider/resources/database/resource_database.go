@@ -32,7 +32,7 @@ func Resource() *schema.Resource {
 		CreateContext: create,
 		ReadContext:   read,
 		UpdateContext: update,
-		DeleteContext: delete,
+		DeleteContext: archive,
 		Schema:        resourceSchema,
 	}
 }

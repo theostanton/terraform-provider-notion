@@ -41,6 +41,36 @@ func (client *Client) GetDatabase(ctx context.Context, databaseId string) (datab
 	return *response, nil
 }
 
+
+func (client *Client) ArchiveDatabase(ctx context.Context, databaseId string) (err error) {
+	path := fmt.Sprintf("databases/%s", databaseId)
+
+	body := struct {
+		archived bool
+	}{
+		archived: true,
+	}
+
+	req, err := client.generatePatch(ctx, path, body)
+	if err != nil {
+		return
+	}
+
+	res, err := client.httpClient.Do(req)
+	if err != nil {
+		return
+	}
+
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to delete database: %w", parseErrorResponse(res))
+	}
+
+	return
+
+}
+
 type QueryDatabaseResponse struct {
 	Results []model.Page `json:"results"`
 	HasMore bool         `json:"has_more"`
