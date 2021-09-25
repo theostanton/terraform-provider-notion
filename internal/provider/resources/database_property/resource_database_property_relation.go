@@ -18,12 +18,17 @@ func RelationResource() *schema.Resource {
 			Required:    true,
 			Description: "title of this property",
 		},
+		"related_database": {
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "ID of database this property relates to",
+		},
 	}
 
 	createOrUpdate := createOrUpdate(func(data *schema.ResourceData) model.DatabaseProperty {
 		name := data.Get("name").(string)
-		databaseId := data.Get("database").(string)
-		return model.NewRelationDatabaseProperty(&name, databaseId)
+		relatedDatabaseId := data.Get("related_database").(string)
+		return model.NewRelationDatabaseProperty(&name, relatedDatabaseId)
 	})
 
 	return &schema.Resource{

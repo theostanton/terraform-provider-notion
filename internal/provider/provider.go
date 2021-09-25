@@ -5,10 +5,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/theostanton/terraform-provider-notion/internal/api"
+	data_database "github.com/theostanton/terraform-provider-notion/internal/provider/datas/database"
 	"github.com/theostanton/terraform-provider-notion/internal/provider/datas/database_entries"
+	data_page "github.com/theostanton/terraform-provider-notion/internal/provider/datas/page"
 	"github.com/theostanton/terraform-provider-notion/internal/provider/datas/user"
 	"github.com/theostanton/terraform-provider-notion/internal/provider/resources/database"
 	"github.com/theostanton/terraform-provider-notion/internal/provider/resources/database_property"
+	"github.com/theostanton/terraform-provider-notion/internal/provider/resources/page"
 )
 
 func New() func() *schema.Provider {
@@ -22,6 +25,10 @@ func New() func() *schema.Provider {
 				},
 			},
 			ResourcesMap: map[string]*schema.Resource{
+				"notion_page":                               page.PageResource(),
+				"notion_database_entry":                     page.DatabasePageResource(),
+				// todo API doesn't seem to handle workspace pages like it says
+				//"notion_workspace_page":                     page.WorkspacePageResource(),
 				"notion_database":                           database.Resource(),
 				"notion_database_property_select":           database_property.SelectResource(),
 				"notion_database_property_multi_select":     database_property.MultiSelectResource(),
@@ -41,7 +48,9 @@ func New() func() *schema.Provider {
 			},
 
 			DataSourcesMap: map[string]*schema.Resource{
+				"notion_database":         data_database.Data(),
 				"notion_user":             user.Data(),
+				"notion_page":             data_page.Data(),
 				"notion_database_entries": database_entries.Data(),
 			},
 

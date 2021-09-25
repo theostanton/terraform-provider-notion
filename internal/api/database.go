@@ -76,7 +76,7 @@ func (client *Client) QueryDatabase(ctx context.Context, databaseId string) (pag
 	return response.Results, nil
 }
 
-func (client *Client) CreateDatabase(ctx context.Context, database model.Database) (id string, err error) {
+func (client *Client) CreateDatabase(ctx context.Context, database model.Database) (savedDatabase model.Database, err error) {
 
 	req, err := client.generatePost(ctx, "databases", database)
 	if err != nil {
@@ -91,19 +91,20 @@ func (client *Client) CreateDatabase(ctx context.Context, database model.Databas
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to create database: %w", parseErrorResponse(res))
+		return model.Database{}, fmt.Errorf("failed to create database: %w", parseErrorResponse(res))
 	}
 
 	var response *model.Database
 
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
-		return "", fmt.Errorf("failed to parse HTTP response: %w", err)
+		return model.Database{}, fmt.Errorf("failed to parse HTTP response: %w", err)
 	}
 
 	databaseId := utils.NormalizeId(*response.Id)
+	response.Id = &databaseId
 
-	return databaseId, nil
+	return *response, nil
 }
 
 func (client *Client) SetDatabaseProperty(ctx context.Context, databaseId string, databasePropertyId string, databaseProperty model.DatabaseProperty) (id string, err error) {

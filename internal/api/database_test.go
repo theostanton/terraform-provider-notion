@@ -21,6 +21,8 @@ func TestClient_CreateDatabase(t *testing.T) {
 		return
 	}
 
+	someTextTitle := "Some text"
+
 	tests := []struct {
 		name     string
 		database model.Database
@@ -32,8 +34,8 @@ func TestClient_CreateDatabase(t *testing.T) {
 				"Basic",
 				model.NewParentFromPageId(parentPageId),
 				map[string]model.DatabaseProperty{
-					"title":     model.NewTitleDatabaseProperty("Name"),
-					"Some text": model.NewRichTextDatabaseProperty(nil),
+					"title":       model.NewTitleDatabaseProperty("Name"),
+					someTextTitle: model.NewBasicDatabaseProperty(&someTextTitle, "rich_text"),
 				},
 			),
 			wantErr: false,
@@ -73,7 +75,7 @@ func TestClient_SetDatabaseProperty(t *testing.T) {
 	database := model.NewDatabase("Test", model.NewParentFromPageId(parentPageId), map[string]model.DatabaseProperty{
 		"title": model.NewTitleDatabaseProperty(name),
 	})
-	databaseId, err := client.CreateDatabase(ctx, database)
+	storedDatabase, err := client.CreateDatabase(ctx, database)
 
 	if err != nil {
 		t.Error(fmt.Sprintf("failed to create test database err=%s", err.Error()))
@@ -96,9 +98,9 @@ func TestClient_SetDatabaseProperty(t *testing.T) {
 		{
 			name: "New property",
 			args: args{
-				databaseId:         databaseId,
+				databaseId:         *storedDatabase.Id,
 				databasePropertyId: "New property",
-				databaseProperty:   model.NewRichTextDatabaseProperty(nil),
+				databaseProperty:   model.NewBasicDatabaseProperty(nil, "rich_text"),
 			},
 			wantId:  "New property",
 			wantErr: false,
@@ -106,9 +108,9 @@ func TestClient_SetDatabaseProperty(t *testing.T) {
 		{
 			name: "Edit property",
 			args: args{
-				databaseId:         databaseId,
+				databaseId:         *storedDatabase.Id,
 				databasePropertyId: "New property",
-				databaseProperty:   model.NewRichTextDatabaseProperty(&editedPropertyTitle),
+				databaseProperty:   model.NewBasicDatabaseProperty(nil, "rich_text"),
 			},
 			wantId:  editedPropertyTitle,
 			wantErr: false,

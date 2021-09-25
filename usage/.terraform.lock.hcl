@@ -4,6 +4,6 @@
 provider "theostanton/providers/notion" {
   version = "0.0.1"
   hashes = [
-    "h1:IyiW74OjaMzZ59BTBzHojgPVM+Pgv0R4Nq5BtaPH6TY=",
+    "h1:3trMPXiqsLTwg+FwyOaAawnh057ipt0f7Y7rHEuSRjI=",
   ]
 }
