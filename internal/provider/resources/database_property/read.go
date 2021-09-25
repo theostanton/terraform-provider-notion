@@ -126,12 +126,12 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 			return
 		}
 
-		err = data.Set("database", property.Relation.DatabaseId)
+		err = data.Set("related_database", property.Relation.DatabaseId)
 
 		if err != nil {
 			diags = append(diags, diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "Couldn't set database value",
+				Summary:  "Couldn't set related_database value",
 				Detail:   err.Error(),
 			})
 			return

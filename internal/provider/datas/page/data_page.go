@@ -1,4 +1,4 @@
-package data_database
+package data_page
 
 import (
 	"context"
@@ -17,6 +17,10 @@ var dataSchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Computed: true,
 	},
+	"parent_page_id": {
+		Type:     schema.TypeString,
+		Computed: true,
+	},
 	"url": {
 		Type:     schema.TypeString,
 		Computed: true,
@@ -24,7 +28,6 @@ var dataSchema = map[string]*schema.Schema{
 }
 
 func Data() *schema.Resource {
-
 	return &schema.Resource{
 		ReadContext: read,
 		Schema:      dataSchema,
@@ -35,7 +38,8 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 	client := m.(*api.Client)
 
 	query := data.Get("query").(string)
-	databases, err := client.SearchDatabases(ctx, query)
+
+	pages, err := client.SearchPages(ctx, query)
 
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
@@ -46,37 +50,45 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 		return
 	}
 
-	if len(databases) == 0 {
+	if len(pages) == 0 {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,
-			Summary:  "Failed to find databases from API for query",
+			Summary:  "Failed to find pages from API for query",
 		})
 		return
 	}
 
-	if len(databases) > 1 {
+	if len(pages) > 1 {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,
-			Summary:  "Found multiple databases from API for query",
+			Summary:  "Found multiple pages from API for query",
 		})
 		return
 	}
 
-	database := databases[0]
+	page := pages[0]
 
-	logger.InfoObject("database", database)
+	logger.InfoObject("page", page)
 
-	title := database.ExtractTitle()
-	err = data.Set("title", title)
+	title, err := page.ExtractPageTitle()
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Warning,
-			Summary:  "Failed to set title from API response",
+			Summary:  "Failed to extract title from API response",
 			Detail:   err.Error(),
 		})
+	} else {
+		err = data.Set("title", title)
+		if err != nil {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Warning,
+				Summary:  "Failed to set title from API response",
+				Detail:   err.Error(),
+			})
+		}
 	}
 
-	err = data.Set("url", database.Url)
+	err = data.Set("url", page.Url)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Warning,
@@ -85,7 +97,15 @@ func read(ctx context.Context, data *schema.ResourceData, m interface{}) (diags 
 		})
 	}
 
-	data.SetId(*database.Id)
+	err = data.Set("parent_page_id", page.Parent.PageId)
+	if err != nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Warning,
+			Summary:  "Failed to set parent from API response",
+			Detail:   err.Error(),
+		})
+	}
+	data.SetId(*page.Id)
 
 	return
 }

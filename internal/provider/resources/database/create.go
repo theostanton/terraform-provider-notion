@@ -62,14 +62,16 @@ func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 		return diags
 	}
 
-	databaseId := ""
+	var storedDatabase model.Database
+	var err error
+	done := false
 	attemptsLeft := 3
-	for databaseId == "" {
-		_databaseId, err := client.CreateDatabase(ctx, database)
+	for done == false {
+		storedDatabase, err = client.CreateDatabase(ctx, database)
 
 		switch {
 		case err == nil:
-			databaseId = _databaseId
+			done = true
 		case strings.Contains(err.Error(), "Conflict occurred while saving.") && attemptsLeft > 0:
 			attemptsLeft = attemptsLeft - 1
 			diags = append(diags, diag.Diagnostic{
@@ -88,8 +90,7 @@ func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 
 	}
 
-	url := fmt.Sprintf("notion.so/%s", databaseId)
-	err := data.Set("url", url)
+	err = data.Set("url", storedDatabase.Url)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Warning,
@@ -98,7 +99,7 @@ func create(ctx context.Context, data *schema.ResourceData, m interface{}) diag.
 		})
 	}
 
-	data.SetId(databaseId)
+	data.SetId(*storedDatabase.Id)
 
 	return diags
 }

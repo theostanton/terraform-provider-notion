@@ -10,41 +10,67 @@ provider "notion" {
   token = var.notion_token
 }
 
+
+data "notion_database" "analytics" {
+  query = "Analytics"
+}
+
+data "notion_page" "tests_page" {
+  query = "Tests Page"
+}
+
+#resource "notion_workspace_page" "some_workspace_page" {
+#  title = "Some workspace page"
+#}
+
+resource "notion_database_entry" "some_child_of_some_workspace_page" {
+  title    = "Child of \"Some workspace database\""
+  database = data.notion_database.analytics.id
+}
+
+resource "notion_page" "some_child_of_some_workspace_page" {
+  title    = "Child of \"Tests Page\""
+  parent_page_id = data.notion_page.tests_page.id
+}
+
+
+/*
+
 resource "notion_database" "some_database" {
-  title = "Some database"
-  parent = var.parent_page_id
+  title              = "Some database"
+  parent             = var.parent_page_id
   title_column_title = "Name"
 }
 
 resource "notion_database" "some_other_database" {
-  title = "Some other database"
-  parent = var.parent_page_id
+  title              = "Some other database"
+  parent             = var.parent_page_id
   title_column_title = "Name"
 }
 
 resource "notion_database_property_relation" "to_some_other" {
-  database = notion_database.some_database.id
-  name = "Relation to some other"
-  database = notion_database.some_other_database.id
+  database         = notion_database.some_database.id
+  name             = "Relation to some other"
+  related_database = notion_database.some_other_database.id
 }
 
 
 resource "notion_database_property_number" "count" {
   database = notion_database.some_other_database.id
-  name = "Count"
+  name     = "Count"
 }
 
 resource "notion_database_property_rollup" "to_some_other" {
-  database = notion_database.some_database.id
-  name = "Rollup of some other"
+  database          = notion_database.some_database.id
+  name              = "Rollup of some other"
   relation_property = notion_database_property_relation.to_some_other.name
-  rollup_property = notion_database_property_number.count.name
-  function = "sum"
-  depends_on = [
-    notion_database_property_number.count]
+  rollup_property   = notion_database_property_number.count.name
+  function          = "sum"
+  depends_on        = [
+    notion_database_property_number.count
+  ]
 }
 
-/*
 resource "notion_database_property_select" "severity" {
   count = 0
   database = notion_database.some_database.id

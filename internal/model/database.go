@@ -9,6 +9,7 @@ import (
 type Database struct {
 	Object         string                      `json:"object,omitempty"`
 	Id             *string                     `json:"id,omitempty"`
+	Url            *string                     `json:"url,omitempty"`
 	CreatedTime    *time.Time                  `json:"created_time,omitempty"`
 	LastEditedTime *time.Time                  `json:"last_edited_time,omitempty"`
 	Title          []RichText                  `json:"title,omitempty"`
@@ -33,6 +34,10 @@ func (database *Database) ExtractColumnTitleId() (string, error) {
 		}
 	}
 	return "", errors.New("getColumnTitleId - couldn't find title property")
+}
+
+func (database *Database) ExtractTitle() string {
+	return database.Title[0].Text.Content
 }
 
 func NewBasicDatabaseProperty(name *string, propertyType string) DatabaseProperty {

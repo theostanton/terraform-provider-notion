@@ -38,6 +38,7 @@ resource "notion_database_property_relation" "to_database_two" {
 
 - **database** (String) ID of database this property belongs to
 - **name** (String) title of this property
+- **related_database** (String) ID of database this property relates to
 
 ### Optional
 
