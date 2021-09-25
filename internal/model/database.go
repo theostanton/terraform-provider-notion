@@ -92,6 +92,11 @@ func NewBasicDatabaseProperty(name *string, propertyType string) DatabasePropert
 			Name:         name,
 			LastEditedBy: &struct{}{},
 		}
+	case "date":
+		return DatabaseProperty{
+			Name: name,
+			Date: &struct{}{},
+		}
 	}
 	logger.Error("unknown property type=%s", propertyType)
 	return DatabaseProperty{}

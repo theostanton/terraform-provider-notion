@@ -16,7 +16,7 @@ data "notion_database" "analytics" {
 }
 
 data "notion_page" "tests_page" {
-  query = "Tests Page"
+  query = "Workspace Tests Page"
 }
 
 #resource "notion_workspace_page" "some_workspace_page" {
@@ -24,13 +24,19 @@ data "notion_page" "tests_page" {
 #}
 
 resource "notion_database_entry" "some_child_of_some_workspace_page" {
-  title    = "Child of \"Some workspace database\""
+  title    = "Child of workspace database"
   database = data.notion_database.analytics.id
 }
 
 resource "notion_page" "some_child_of_some_workspace_page" {
-  title    = "Child of \"Tests Page\""
+  title    = "Child of the page of tests"
   parent_page_id = data.notion_page.tests_page.id
+}
+
+
+resource "notion_database_property_date" "date" {
+  database = data.notion_database.analytics.id
+  name = "Date"
 }
 
 
@@ -92,12 +98,6 @@ resource "notion_database_property_rich_text" "summary" {
   count = 0
   database = notion_database.some_database.id
   name = "Summary"
-}
-
-resource "notion_database_property_date" "date" {
-  count = 0
-  database = notion_database.some_database.id
-  name = "Date"
 }
 
 resource "notion_database_property_people" "people" {
