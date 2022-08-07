@@ -67,3 +67,21 @@ func TestClient_ListUsers(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_GetCurrentUser(t *testing.T) {
+	validToken := os.Getenv("NOTION_TOKEN")
+	ctx := context.Background()
+	client, err := NewClient(validToken)
+
+	if err != nil {
+		t.Errorf("Failed to create Client")
+	}
+
+	user, err := client.GetCurrentUser(ctx)
+	if err != nil {
+		t.Errorf("GetCurrentUser() error = %v", err)
+	}
+	if len(user.ID) == 0 {
+		t.Errorf("Invalid user, the id is empty!")
+	}
+}
