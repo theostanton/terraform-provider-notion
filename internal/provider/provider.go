@@ -25,8 +25,8 @@ func New() func() *schema.Provider {
 				},
 			},
 			ResourcesMap: map[string]*schema.Resource{
-				"notion_page":                               page.PageResource(),
-				"notion_database_entry":                     page.DatabasePageResource(),
+				"notion_page":           page.PageResource(),
+				"notion_database_entry": page.DatabasePageResource(),
 				// todo API doesn't seem to handle workspace pages like it says
 				//"notion_workspace_page":                     page.WorkspacePageResource(),
 				"notion_database":                           database.Resource(),
@@ -96,7 +96,7 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 		return nil, diags
 	}
 
-	_, err = client.ListUsers(ctx)
+	_, err = client.GetCurrentUser(ctx)
 
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
