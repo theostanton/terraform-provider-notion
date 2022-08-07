@@ -1,5 +1,5 @@
 provider "notion" {
-  api_token = "secret_123"
+  token = "secret_123"
 }
 
 data "notion_page" "example_parent" {
